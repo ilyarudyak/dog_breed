@@ -10,7 +10,7 @@ from data_prep import get_files
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
-def get_vgg(use_cuda=false):
+def get_vgg(use_cuda=False):
     # define VGG16 model
     VGG16 = models.vgg16(pretrained=True)
 
