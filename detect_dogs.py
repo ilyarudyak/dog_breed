@@ -51,7 +51,7 @@ def VGG16_predict(img_path):
         img = img.cuda()
 
     prediction = VGG16(img)
-    prediction = prediction.data.numpy().argmax()
+    prediction = prediction.data.cpu().numpy().argmax()
 
     return prediction
 
