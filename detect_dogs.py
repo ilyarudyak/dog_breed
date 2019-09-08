@@ -10,7 +10,7 @@ from data_prep import get_files
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
-def get_vgg(use_cuda=False):
+def get_vgg():
     # define VGG16 model
     VGG16 = models.vgg16(pretrained=True)
 
@@ -35,8 +35,7 @@ def VGG16_predict(img_path):
     Returns:
         Index corresponding to VGG-16 model's prediction
     """
-    use_cuda = torch.cuda.is_available()
-    VGG16 = get_vgg(use_cuda=use_cuda)
+    VGG16 = get_vgg()
 
     img = Image.open(img_path)
     data_transform = transforms.Compose([transforms.RandomResizedCrop(224),
@@ -46,6 +45,10 @@ def VGG16_predict(img_path):
     img = data_transform(img)
     img = img.unsqueeze(0)
     img = Variable(img)
+
+    use_cuda = torch.cuda.is_available()
+    if use_cuda:
+        img = img.cuda()
 
     prediction = VGG16(img)
     prediction = prediction.data.numpy().argmax()
