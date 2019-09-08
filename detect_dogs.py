@@ -10,13 +10,9 @@ from data_prep import get_files
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
-def get_vgg():
+def get_vgg(use_cuda=false):
     # define VGG16 model
     VGG16 = models.vgg16(pretrained=True)
-
-    # check if CUDA is available
-    use_cuda = torch.cuda.is_available()
-    print(use_cuda)
 
     # move model to GPU if CUDA is available
     if use_cuda:
@@ -25,7 +21,7 @@ def get_vgg():
     return VGG16
 
 
-def VGG16_predict(img_path):
+def VGG16_predict(img_path, use_cuda=False):
     """
     Use pre-trained VGG-16 model to obtain index corresponding to
     predicted ImageNet class for image at specified path
@@ -36,7 +32,7 @@ def VGG16_predict(img_path):
     Returns:
         Index corresponding to VGG-16 model's prediction
     """
-    VGG16 = get_vgg()
+    VGG16 = get_vgg(use_cuda)
 
     img = Image.open(img_path)
     data_transform = transforms.Compose([transforms.RandomResizedCrop(224),
@@ -47,8 +43,6 @@ def VGG16_predict(img_path):
     img = img.unsqueeze(0)
     img = Variable(img)
 
-    use_cuda = torch.cuda.is_available()
-    print(use_cuda)
     if use_cuda:
         img = img.cuda()
 
