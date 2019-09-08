@@ -16,6 +16,7 @@ def get_vgg():
 
     # check if CUDA is available
     use_cuda = torch.cuda.is_available()
+    print(use_cuda)
 
     # move model to GPU if CUDA is available
     if use_cuda:
@@ -47,6 +48,7 @@ def VGG16_predict(img_path):
     img = Variable(img)
 
     use_cuda = torch.cuda.is_available()
+    print(use_cuda)
     if use_cuda:
         img = img.cuda()
 
