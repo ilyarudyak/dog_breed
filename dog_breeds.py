@@ -60,7 +60,7 @@ def train(n_epochs, loaders, model, optimizer, criterion, use_cuda, save_path):
             optimizer.step()
             train_loss += ((1 / (batch_idx + 1)) * (loss.data - train_loss))
 
-            if (batch_idx + 1) % 5 == 0:
+            if (batch_idx + 1) % 10 == 0:
                 print(f'Epoch:{epoch}/{n_epochs} \tBatch:{batch_idx + 1}')
                 print(f'Train Loss: {train_loss}\n')
 
@@ -92,7 +92,7 @@ def train(n_epochs, loaders, model, optimizer, criterion, use_cuda, save_path):
 
 
 def train_model(n_epochs=10):
-    loaders = get_loaders()
+    loaders = get_loaders(batch_size=256)
     model = get_model()
     use_cuda = torch.cuda.is_available()
 

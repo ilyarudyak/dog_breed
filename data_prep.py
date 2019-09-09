@@ -36,7 +36,7 @@ def get_loaders(batch_size=64):
     valid_dataset = datasets.ImageFolder(os.path.join(data_dir, 'valid'), transform=test_transforms)
     test_dataset = datasets.ImageFolder(os.path.join(data_dir, 'test'), transform=test_transforms)
 
-    print(len(train_dataset.classes))
+    # print(len(train_dataset.classes))
 
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     valid_loader = torch.utils.data.DataLoader(valid_dataset, batch_size=batch_size, shuffle=True)
