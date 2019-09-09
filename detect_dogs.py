@@ -33,13 +33,15 @@ def VGG16_predict(img_path, use_cuda=False):
         Index corresponding to VGG-16 model's prediction
     """
     VGG16 = get_vgg(use_cuda)
+    VGG16.eval()
 
     img = Image.open(img_path)
-    data_transform = transforms.Compose([transforms.RandomResizedCrop(224),
-                                         transforms.ToTensor(),
-                                         transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                                                              std=[0.229, 0.224, 0.225])])
-    img = data_transform(img)
+    inference_transforms = transforms.Compose([transforms.Resize(255),
+                                               transforms.CenterCrop(224),
+                                               transforms.ToTensor(),
+                                               transforms.Normalize([0.485, 0.456, 0.406],
+                                                                    [0.229, 0.224, 0.225])])
+    img = inference_transforms(img)
     img = img.unsqueeze(0)
     img = Variable(img)
 
@@ -70,5 +72,3 @@ if __name__ == '__main__':
     dog_files_short = dog_files[:100]
     print(1 - get_accuracy(human_files_short))
     print(get_accuracy(dog_files_short))
-
-
