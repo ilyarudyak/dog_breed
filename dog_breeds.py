@@ -92,7 +92,7 @@ def train(n_epochs, loaders, model, optimizer, criterion, use_cuda, save_path):
 
 
 def train_model(n_epochs=10):
-    loaders = get_loaders(batch_size=256)
+    loaders = get_loaders(batch_size=128)
     model = get_model()
     use_cuda = torch.cuda.is_available()
 
