@@ -41,6 +41,31 @@ def get_model(n_classes=133):
     return model
 
 
+def get_model_v2(n_classes=133):
+    use_cuda = torch.cuda.is_available()
+    model = models.vgg16(pretrained=True)
+
+    # freeze parameters of the model to avoid brackpropagation
+    for param in model.parameters():
+        param.requires_grad = False
+
+    # define dog breed classifier part of model_transfer
+    classifier = nn.Sequential(nn.Linear(25088, 4096),
+                               nn.ReLU(),
+                               nn.Dropout(0.5),
+                               nn.Linear(4096, 512),
+                               nn.ReLU(),
+                               nn.Dropout(0.5),
+                               nn.Linear(512, n_classes),
+                               nn.LogSoftmax(dim=1))
+    model.classifier = classifier
+
+    if use_cuda:
+        model = model.cuda()
+
+    return model
+
+
 def train(n_epochs, loaders, model, optimizer, criterion, use_cuda, save_path):
     valid_loss_min = np.Inf
 
@@ -96,10 +121,10 @@ def train(n_epochs, loaders, model, optimizer, criterion, use_cuda, save_path):
 
 def train_model(n_epochs=10):
     loaders = get_loaders(batch_size=128)
-    model = get_model()
+    model = get_model_v2()
     use_cuda = torch.cuda.is_available()
 
-    criterion = nn.CrossEntropyLoss()
+    criterion = nn.NLLLoss()
     optimizer = optim.Adam(model.classifier.parameters(), lr=0.001)
 
     model = train(n_epochs=n_epochs,
@@ -157,7 +182,7 @@ def test_model():
 
 
 def train_v2(model, criterion, optimizer, train_loader, valid_loader,
-             save_file_name, max_epochs_stop=3, n_epochs=20, print_every=2):
+             save_file_name, save_hist_file, max_epochs_stop=3, n_epochs=20, print_every=1):
     """Train a PyTorch Model
         Params
         --------
@@ -327,6 +352,7 @@ def train_v2(model, criterion, optimizer, train_loader, valid_loader,
                                 'train_loss', 'valid_loss', 'train_acc',
                                 'valid_acc'
                             ])
+                        history.to_csv(save_hist_file)
                         return model, history
 
     # Attach the optimizer
@@ -343,6 +369,8 @@ def train_v2(model, criterion, optimizer, train_loader, valid_loader,
     history = pd.DataFrame(
         history,
         columns=['train_loss', 'valid_loss', 'train_acc', 'valid_acc'])
+    history.to_csv(save_hist_file)
+
     return model, history
 
 
@@ -358,9 +386,11 @@ def train_model_v2(n_epochs=20):
                               optimizer=optimizer,
                               train_loader=loaders['train'],
                               valid_loader=loaders['valid'],
-                              save_file_name='models/vgg16_transfer_v2.pt')
+                              save_file_name='models/vgg16_transfer_v2.pt',
+                              save_hist_file='models/vgg16_transfer_v2_history.csv')
+    return model, history
 
 
 if __name__ == '__main__':
-    train_model_v2()
+    model, history = train_model_v2(n_epochs=1)
     # test_model()
