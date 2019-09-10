@@ -352,7 +352,7 @@ def train_v2(model, criterion, optimizer, train_loader, valid_loader,
                                 'train_loss', 'valid_loss', 'train_acc',
                                 'valid_acc'
                             ])
-                        history.to_csv(save_hist_file)
+                        history.to_csv(save_hist_file, index=False)
                         return model, history
 
     # Attach the optimizer
@@ -369,7 +369,7 @@ def train_v2(model, criterion, optimizer, train_loader, valid_loader,
     history = pd.DataFrame(
         history,
         columns=['train_loss', 'valid_loss', 'train_acc', 'valid_acc'])
-    history.to_csv(save_hist_file)
+    history.to_csv(save_hist_file, index=False)
 
     return model, history
 
