@@ -64,6 +64,7 @@ def view_recon(img, recon):
         ax.axis('off')
         ax.set_adjustable('box-forced')
 
+
 def view_classify(img, ps, version="MNIST"):
     ''' Function for viewing an image and it's predicted classes.
     '''

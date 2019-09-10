@@ -16,7 +16,7 @@ def get_files():
     return human_files, dog_files
 
 
-def get_loaders(batch_size=64):
+def get_loaders(batch_size=128):
     data_dir = os.path.join(home, 'data/dog_breed/dogImages')
 
     train_transforms = transforms.Compose([transforms.RandomRotation(30),
