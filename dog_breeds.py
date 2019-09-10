@@ -363,7 +363,7 @@ def train_v2(model, criterion, optimizer, train_loader, valid_loader,
         f'\nBest epoch: {best_epoch} with loss: {valid_loss_min:.2f} and acc: {100 * valid_acc:.2f}%'
     )
     print(
-        f'{total_time:.2f} total seconds elapsed. {total_time / (epoch):.2f} seconds per epoch.'
+        f'{total_time:.2f} total seconds elapsed. {total_time / n_epochs :.2f} seconds per epoch.'
     )
     # Format history
     history = pd.DataFrame(
