@@ -393,5 +393,5 @@ def train_model_v2(n_epochs=20):
 
 
 if __name__ == '__main__':
-    model, history = train_model_v2(n_epochs=1)
+    model, history = train_model_v2(n_epochs=20)
     # test_model()
