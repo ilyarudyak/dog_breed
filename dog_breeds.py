@@ -387,7 +387,8 @@ def train_model_v2(n_epochs=20):
                               train_loader=loaders['train'],
                               valid_loader=loaders['valid'],
                               save_file_name='models/vgg16_transfer_v2.pt',
-                              save_hist_file='models/vgg16_transfer_v2_history.csv')
+                              save_hist_file='models/vgg16_transfer_v2_history.csv',
+                              n_epochs=n_epochs)
     return model, history
 
 
