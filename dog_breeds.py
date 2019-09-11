@@ -119,8 +119,8 @@ def train(n_epochs, loaders, model, optimizer, criterion, use_cuda, save_path):
     return model
 
 
-def train_model(n_epochs=10):
-    loaders = get_loaders(batch_size=128)
+def train_model(n_epochs=10, batch_size=256):
+    loaders = get_loaders(batch_size=batch_size)
     model = get_model_v2()
     use_cuda = torch.cuda.is_available()
 
@@ -219,8 +219,10 @@ def train_v2(model, criterion, optimizer, train_loader, valid_loader,
     overall_start = timer()
 
     # Main loop
+    epochs_before_stop = 0
+    best_epoch = 0
     for epoch in range(n_epochs):
-
+        epochs_before_stop += 1
         # keep track of training and validation loss each epoch
         train_loss = 0.0
         valid_loss = 0.0
@@ -363,7 +365,7 @@ def train_v2(model, criterion, optimizer, train_loader, valid_loader,
         f'\nBest epoch: {best_epoch} with loss: {valid_loss_min:.2f} and acc: {100 * valid_acc:.2f}%'
     )
     print(
-        f'{total_time:.2f} total seconds elapsed. {total_time / n_epochs :.2f} seconds per epoch.'
+        f'{total_time:.2f} total seconds elapsed. {total_time / epochs_before_stop :.2f} seconds per epoch.'
     )
     # Format history
     history = pd.DataFrame(
@@ -393,5 +395,6 @@ def train_model_v2(n_epochs=20, batch_size=256):
 
 
 if __name__ == '__main__':
-    model, history = train_model_v2(n_epochs=20)
-    # test_model()
+    # model, history = train_model_v2(n_epochs=20)
+    train_model()
+    test_model()
