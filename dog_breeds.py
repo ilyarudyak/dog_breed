@@ -374,7 +374,7 @@ def train_v2(model, criterion, optimizer, train_loader, valid_loader,
     return model, history
 
 
-def train_model_v2(n_epochs=20, batch_size=64):
+def train_model_v2(n_epochs=20, batch_size=256):
     model = get_model()
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.classifier.parameters())
