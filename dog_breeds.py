@@ -119,12 +119,12 @@ def train(n_epochs, loaders, model, optimizer, criterion, use_cuda, save_path):
     return model
 
 
-def train_model(n_epochs=10, batch_size=256):
+def train_model(n_epochs=20, batch_size=256):
     loaders = get_loaders(batch_size=batch_size)
-    model = get_model_v2()
+    model = get_model()
     use_cuda = torch.cuda.is_available()
 
-    criterion = nn.NLLLoss()
+    criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.classifier.parameters(), lr=0.001)
 
     model = train(n_epochs=n_epochs,
@@ -377,8 +377,8 @@ def train_v2(model, criterion, optimizer, train_loader, valid_loader,
 
 
 def train_model_v2(n_epochs=20, batch_size=256):
-    model = get_model()
-    criterion = nn.CrossEntropyLoss()
+    model = get_model_v2()
+    criterion = nn.NLLLoss()
     optimizer = optim.Adam(model.classifier.parameters())
 
     loaders = get_loaders(batch_size=batch_size)
@@ -395,6 +395,6 @@ def train_model_v2(n_epochs=20, batch_size=256):
 
 
 if __name__ == '__main__':
-    # model, history = train_model_v2(n_epochs=20)
-    train_model()
-    test_model()
+    model, history = train_model_v2(n_epochs=20)
+    # train_model()
+    # test_model()
