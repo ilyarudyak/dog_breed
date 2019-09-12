@@ -68,20 +68,19 @@ def get_model_v2(n_classes=133):
 
 def get_model_v3(n_classes=133):
     use_cuda = torch.cuda.is_available()
-    model = models.vgg16(pretrained=True)
+    model = models.resnet50(pretrained=True)
 
     # freeze parameters of the model to avoid brackpropagation
     for param in model.parameters():
         param.requires_grad = False
 
     # define dog breed classifier part of model_transfer
-    n_inputs = model.classifier[6].in_features
-    classifier = nn.Sequential(nn.Linear(n_inputs, 256),
-                               nn.ReLU(),
-                               nn.Dropout(0.2),
-                               nn.Linear(256, n_classes),
-                               nn.LogSoftmax(dim=1))
-    model.classifier[6] = classifier
+    n_inputs = model.fc.in_features
+    model.fc = nn.Sequential(nn.Linear(n_inputs, 256),
+                             nn.ReLU(),
+                             nn.Dropout(0.2),
+                             nn.Linear(256, n_classes),
+                             nn.LogSoftmax(dim=1))
 
     if use_cuda:
         model = model.cuda()
@@ -424,5 +423,7 @@ def train_model_v2(n_epochs=30, batch_size=256,
 
 
 if __name__ == '__main__':
-    model, history = train_model_v2(n_epochs=30)
+    model, history = train_model_v2(n_epochs=30,
+                                    save_file_name='models/resnet50_v2.pt',
+                                    save_hist_file='models/resnet50_v2_history.csv')
     test_model(model)
