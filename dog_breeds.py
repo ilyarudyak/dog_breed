@@ -66,6 +66,29 @@ def get_model_v2(n_classes=133):
     return model
 
 
+def get_model_v3(n_classes=133):
+    use_cuda = torch.cuda.is_available()
+    model = models.vgg16(pretrained=True)
+
+    # freeze parameters of the model to avoid brackpropagation
+    for param in model.parameters():
+        param.requires_grad = False
+
+    # define dog breed classifier part of model_transfer
+    n_inputs = model.classifier[6].in_features
+    classifier = nn.Sequential(nn.Linear(n_inputs, 256),
+                               nn.ReLU(),
+                               nn.Dropout(0.2),
+                               nn.Linear(256, n_classes),
+                               nn.LogSoftmax(dim=1))
+    model.classifier[6] = classifier
+
+    if use_cuda:
+        model = model.cuda()
+
+    return model
+
+
 def train(n_epochs, loaders, model, optimizer, criterion, use_cuda, save_path):
     valid_loss_min = np.Inf
 
@@ -376,8 +399,8 @@ def train_v2(model, criterion, optimizer, train_loader, valid_loader,
     return model, history
 
 
-def train_model_v2(n_epochs=30, batch_size=256):
-    model = get_model_v2()
+def train_model_v2(n_epochs=20, batch_size=256):
+    model = get_model_v3()
     criterion = nn.NLLLoss()
     optimizer = optim.Adam(model.classifier.parameters())
 
@@ -395,6 +418,6 @@ def train_model_v2(n_epochs=30, batch_size=256):
 
 
 if __name__ == '__main__':
-    model, history = train_model_v2(n_epochs=20)
+    model, history = train_model_v2(n_epochs=30)
     # train_model()
     # test_model()
