@@ -49,9 +49,26 @@ def get_loaders(batch_size=128):
     return data_loaders
 
 
+def get_classes():
+    data_dir = os.path.join(home, 'data/dog_breed/dogImages')
+
+    train_transforms = transforms.Compose([transforms.RandomRotation(30),
+                                           transforms.RandomResizedCrop(224),
+                                           transforms.RandomHorizontalFlip(),
+                                           transforms.ToTensor(),
+                                           transforms.Normalize([0.485, 0.456, 0.406],
+                                                                [0.229, 0.224, 0.225])])
+
+    train_dataset = datasets.ImageFolder(os.path.join(data_dir, 'train'), transform=train_transforms)
+
+    return train_dataset.classes
+
+
 if __name__ == '__main__':
     # human_files, dog_files = get_files()
     # print('There are %d total human images.' % len(human_files))
     # print('There are %d total dog images.' % len(dog_files))
 
-    loaders = get_loaders()
+    # loaders = get_loaders()
+    classes = get_classes()
+    print(classes)

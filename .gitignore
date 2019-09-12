@@ -237,3 +237,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+!/models/
+!/models/vgg16_v2.pt

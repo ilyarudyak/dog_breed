@@ -11,10 +11,13 @@ from torchvision import datasets, transforms, models
 from timeit import default_timer as timer
 
 from PIL import ImageFile
+import matplotlib.pyplot as plt
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 from data_prep import get_loaders
+from detect_humans import is_human
+from detect_dogs import is_dog
 
 
 def get_model(n_classes=133):
@@ -194,7 +197,7 @@ def test_model(model=None, filename='models/model_transfer.pt'):
     if model:
         pass
     else:
-        model = get_model()
+        model = get_model_v2()
         model.load_state_dict(torch.load(filename))
 
     loaders = get_loaders()
@@ -427,6 +430,47 @@ def train_model_v2(n_epochs=30, batch_size=256,
                               save_hist_file=save_hist_file,
                               n_epochs=n_epochs)
     return model, history
+
+
+def predict_breed(model, img_path, class_names):
+    img = Image.open(img_path)
+    test_transforms = transforms.Compose([transforms.Resize(258),
+                                          transforms.CenterCrop(224),
+                                          transforms.ToTensor(),
+                                          transforms.Normalize(mean=(0.485, 0.456, 0.406),
+                                                               std=(0.229, 0.224, 0.225))])
+    img_tensor = test_transforms(img).unsqueeze_(0)
+
+    use_cuda = torch.cuda.is_available()
+    if use_cuda:
+        img_tensor = img_tensor.cuda()
+
+    model.eval()
+    with torch.no_grad():
+        output = model(img_tensor)
+        prediction = torch.argmax(output).item()
+
+    return class_names[prediction]
+
+
+def run_app(model, img_path, class_names):
+    ## handle cases for a human face, dog, and neither
+    if is_human(img_path):
+        print('Hello Human!')
+        plt.imshow(Image.open(img_path))
+        plt.show()
+        print(f'You look like a ... {predict_breed(model, img_path, class_names)}')
+        print('\n-----------------------------------\n')
+    elif is_dog(img_path):
+        plt.imshow(Image.open(img_path))
+        plt.show()
+        print(f'This is a picture of a ... {predict_breed(model, img_path, class_names)}')
+        print('\n-----------------------------------\n')
+    else:
+        plt.imshow(Image.open(img_path))
+        plt.show()
+        print('Sorry, I did not detect a human or a dog in this image.')
+        print('\n-----------------------------------\n')
 
 
 if __name__ == '__main__':
