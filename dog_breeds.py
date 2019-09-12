@@ -190,9 +190,13 @@ def test(loaders, model, criterion, use_cuda):
     print('\nTest Accuracy: %2d%% (%2d/%2d)' % (100. * correct / total, correct, total))
 
 
-def test_model():
-    model = get_model()
-    model.load_state_dict(torch.load('models/model_transfer.pt'))
+def test_model(model=None, filename='models/model_transfer.pt'):
+
+    if model:
+        pass
+    else:
+        model = get_model()
+        model.load_state_dict(torch.load(filename))
 
     loaders = get_loaders()
     criterion = nn.CrossEntropyLoss()
@@ -399,7 +403,9 @@ def train_v2(model, criterion, optimizer, train_loader, valid_loader,
     return model, history
 
 
-def train_model_v2(n_epochs=20, batch_size=256):
+def train_model_v2(n_epochs=30, batch_size=256,
+                   save_file_name='models/vgg16_v2.pt',
+                   save_hist_file='models/vgg16_v2_history.csv'):
     model = get_model_v3()
     criterion = nn.NLLLoss()
     optimizer = optim.Adam(model.classifier.parameters())
@@ -411,13 +417,12 @@ def train_model_v2(n_epochs=20, batch_size=256):
                               optimizer=optimizer,
                               train_loader=loaders['train'],
                               valid_loader=loaders['valid'],
-                              save_file_name='models/vgg16_transfer_v2.pt',
-                              save_hist_file='models/vgg16_transfer_v2_history.csv',
+                              save_file_name=save_file_name,
+                              save_hist_file=save_hist_file,
                               n_epochs=n_epochs)
     return model, history
 
 
 if __name__ == '__main__':
     model, history = train_model_v2(n_epochs=30)
-    # train_model()
-    # test_model()
+    test_model(model)
