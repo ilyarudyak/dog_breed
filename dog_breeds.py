@@ -432,5 +432,6 @@ def train_model_v2(n_epochs=30, batch_size=256,
 if __name__ == '__main__':
     model, history = train_model_v2(n_epochs=30,
                                     save_file_name='models/resnet50_v2.pt',
-                                    save_hist_file='models/resnet50_v2_history.csv')
+                                    save_hist_file='models/resnet50_v2_history.csv',
+                                    model_type='resnet50')
     test_model(model)
