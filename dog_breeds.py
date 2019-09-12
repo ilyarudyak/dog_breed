@@ -404,10 +404,17 @@ def train_v2(model, criterion, optimizer, train_loader, valid_loader,
 
 def train_model_v2(n_epochs=30, batch_size=256,
                    save_file_name='models/vgg16_v2.pt',
-                   save_hist_file='models/vgg16_v2_history.csv'):
+                   save_hist_file='models/vgg16_v2_history.csv',
+                   model_type='VGG16'):
     model = get_model_v3()
     criterion = nn.NLLLoss()
-    optimizer = optim.Adam(model.classifier.parameters())
+
+    if model_type == 'VGG16':
+        optimizer = optim.Adam(model.classifier.parameters())
+    elif model_type == 'resnet50':
+        optimizer = optim.Adam(model.fc.parameters())
+    else:
+        raise Exception
 
     loaders = get_loaders(batch_size=batch_size)
 
