@@ -9,6 +9,12 @@ from torchvision import transforms, datasets
 
 home = str(Path.home())
 
+from fastai.vision import *
+from fastai.metrics import error_rate
+
+from PIL import ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+
 
 def get_files():
     human_files = np.array(glob(os.path.join(home, "data/dog_breed/lfw/*/*")))
@@ -64,11 +70,24 @@ def get_classes():
     return train_dataset.classes
 
 
+def get_data_fastai(bs=256):
+    path = Path.home() / 'data/dog_breed/dogImages'
+    data = ImageDataBunch.from_folder(path=path,
+                                      ds_tfms=get_transforms(),
+                                      size=224,
+                                      bs=bs,
+                                      num_workers=0)
+    data.normalize()
+    return data
+
+
 if __name__ == '__main__':
     # human_files, dog_files = get_files()
     # print('There are %d total human images.' % len(human_files))
     # print('There are %d total dog images.' % len(dog_files))
 
     # loaders = get_loaders()
-    classes = get_classes()
-    print(classes)
+    # classes = get_classes()
+    # print(classes)
+
+    data = get_data_fastai()
