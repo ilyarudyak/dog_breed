@@ -70,7 +70,7 @@ def get_classes():
     return train_dataset.classes
 
 
-def get_data_fastai(bs=256):
+def get_data_fastai(bs=128):
     path = Path.home() / 'data/dog_breed/dogImages'
     data = ImageDataBunch.from_folder(path=path,
                                       ds_tfms=get_transforms(),
