@@ -18,7 +18,7 @@ def train():
 
 def test_model_fastai(model_type=models.resnet50,
                       stage='stage-1',
-                      batch_size=128):
+                      batch_size=64):
     data = get_data_fastai()
     learn = cnn_learner(data, model_type, metrics=accuracy)
     learn.load(stage)
