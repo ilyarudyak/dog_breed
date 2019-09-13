@@ -195,7 +195,9 @@ def test(loaders, model, criterion, use_cuda):
     print('\nTest Accuracy: %2d%% (%2d/%2d)' % (100. * correct / total, correct, total))
 
 
-def test_model(model=None, filename='models/model_transfer.pt'):
+def test_model(model=None,
+               filename='models/model_transfer.pt',
+               batch_size=256):
 
     if model:
         pass
@@ -203,7 +205,7 @@ def test_model(model=None, filename='models/model_transfer.pt'):
         model = get_model_v2()
         model.load_state_dict(torch.load(filename))
 
-    loaders = get_loaders()
+    loaders = get_loaders(batch_size=batch_size)
     criterion = nn.CrossEntropyLoss()
     use_cuda = torch.cuda.is_available()
 
