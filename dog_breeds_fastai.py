@@ -10,7 +10,7 @@ def get_learner():
     return cnn_learner(data, models.resnet50, metrics=accuracy)
 
 
-def train():
+def train_simple_model():
     learn = get_learner()
     learn.fit_one_cycle(5)
     learn.save('stage-1')
