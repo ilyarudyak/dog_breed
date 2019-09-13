@@ -213,13 +213,6 @@ def test_model(model=None, filename='models/model_transfer.pt'):
          use_cuda=use_cuda)
 
 
-def test_model_fastai(model_type=models.resnet50, stage='stage-1'):
-    data = get_data_fastai()
-    learn = cnn_learner(data, model_type, metrics=accuracy)
-    learn.load('stage-1')
-    test_model(learn.model)
-
-
 def train_v2(model, criterion, optimizer, train_loader, valid_loader,
              save_file_name, save_hist_file, max_epochs_stop=3, n_epochs=20, print_every=1):
     """Train a PyTorch Model
@@ -484,9 +477,8 @@ def run_app(model, img_path, class_names):
 
 
 if __name__ == '__main__':
-    # model, history = train_model_v2(n_epochs=30,
-    #                                 save_file_name='models/resnet50_v2.pt',
-    #                                 save_hist_file='models/resnet50_v2_history.csv',
-    #                                 model_type='resnet50')
-    # test_model(model)
-    test_model_fastai()
+    model, history = train_model_v2(n_epochs=30,
+                                    save_file_name='models/resnet50_v2.pt',
+                                    save_hist_file='models/resnet50_v2_history.csv',
+                                    model_type='resnet50')
+    test_model(model)
