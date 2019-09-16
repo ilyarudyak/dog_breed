@@ -18,3 +18,6 @@ Test Accuracy: 87% (731/836)
 ## `resnet50` `fastai`
 ### default settings
 Test Accuracy: 88% (743/836)
+
+### tuned settings
+Test Accuracy: 89% (747/836)
