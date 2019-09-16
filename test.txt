@@ -1,1 +1,2 @@
 this is just a test file
+and this is a new line in the test file
