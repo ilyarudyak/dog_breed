@@ -28,3 +28,4 @@ if __name__ == '__main__':
     history = pd.read_csv('models/vgg16_transfer_v2_history.csv')
     plot_losses(history)
     plt.show()
+

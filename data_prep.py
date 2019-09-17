@@ -9,6 +9,7 @@ from torchvision import transforms, datasets
 
 home = str(Path.home())
 
+from fastai import *
 from fastai.vision import *
 from fastai.metrics import error_rate
 
