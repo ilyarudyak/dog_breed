@@ -18,7 +18,7 @@ def prepare_submission(data, learn, path_test):
     filenames = [get_numeric_part(fp, path_test) for fp in data.test_ds.items]
     df.insert(0, "id", filenames)
     df_sorted = df.sort_values(by='id')
-    df_sorted.to_csv('submission.csv')
+    df_sorted.to_csv('submission.csv', index=False)
 
 
 
